@@ -1,0 +1,66 @@
+version: '3'
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mysql:
+    driver: local
+
+services:
+
+  ### MySQL ################################################
+  mysql-master:
+    image: mysql:5.7
+    environment:
+      - MYSQL_USER=twitf
+      - MYSQL_PASSWORD=twitf
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      #- ./mysql-master/data:/var/lib/mysql
+      - ./mysql-master/conf.d:/etc/mysql/conf.d
+    ports:
+      - "3307:3306"
+    networks:
+      - backend
+    container_name: mysql-master
+  mysql-slave0:
+    image: mysql:5.7
+    environment:
+      - MYSQL_USER=twitf
+      - MYSQL_PASSWORD=twitf
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      #- ./mysql-slave0/data:/var/lib/mysql
+      - ./mysql-slave0/conf.d:/etc/mysql/conf.d
+    ports:
+      - "3308:3306"
+    depends_on:
+      - mysql-master
+    networks:
+      - backend
+    container_name: mysql-slave0
+  mysql-slave1:
+    image: mysql:5.7
+    environment:
+      - MYSQL_USER=twitf
+      - MYSQL_PASSWORD=twitf
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      #- ./mysql-slave0/data:/var/lib/mysql
+      - ./mysql-slave1/conf.d:/etc/mysql/conf.d
+    ports:
+      - "3309:3306"
+    depends_on:
+      - mysql-master
+    networks:
+      - backend
+    container_name: mysql-slave1
+  mycat:
+    build: ./mycat
+    ports:
+      - "8066:8066"
+      - "9066:9066"
+    networks:
+      - backend
+    container_name: mycat
