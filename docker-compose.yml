@@ -58,6 +58,8 @@ services:
     container_name: mysql-slave1
   mycat:
     build: ./mycat
+    volumes:
+      - ./mycat/conf:/usr/local/mycat/conf
     ports:
       - "8066:8066"
       - "9066:9066"
