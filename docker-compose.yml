@@ -1,8 +1,13 @@
-version: '3'
+version: '2'
+
+#自定义网卡
 networks:
   backend:
     driver: bridge
-
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24
+          gateway: 172.19.0.1
 volumes:
   mysql:
     driver: local
@@ -22,7 +27,8 @@ services:
     ports:
       - "3307:3306"
     networks:
-      - backend
+      backend:
+        ipv4_address: 172.19.0.3
     container_name: mysql-master
   mysql-slave0:
     image: mysql:5.7
@@ -38,7 +44,8 @@ services:
     depends_on:
       - mysql-master
     networks:
-      - backend
+      backend:
+        ipv4_address: 172.19.0.4
     container_name: mysql-slave0
   mysql-slave1:
     image: mysql:5.7
@@ -54,7 +61,8 @@ services:
     depends_on:
       - mysql-master
     networks:
-      - backend
+      backend:
+        ipv4_address: 172.19.0.5
     container_name: mysql-slave1
   mycat:
     build: ./mycat
