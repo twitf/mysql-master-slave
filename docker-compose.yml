@@ -16,29 +16,29 @@ services:
 
   ### MySQL ################################################
   mysql-master:
-    image: mysql:5.7
+    image: mariadb:latest
     environment:
       - MYSQL_USER=twitf
       - MYSQL_PASSWORD=twitf
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      #- ./mysql-master/data:/var/lib/mysql
-      - ./mysql-master/conf.d:/etc/mysql/conf.d
+      #- ./mariadb-master/data:/var/lib/mysql
+      - ./mariadb-master/conf.d:/etc/mysql/conf.d
     ports:
       - "3307:3306"
     networks:
       backend:
         ipv4_address: 172.19.0.3
-    container_name: mysql-master
+    container_name: mariadb-master
   mysql-slave0:
-    image: mysql:5.7
+    image: mariadb:latest
     environment:
       - MYSQL_USER=twitf
       - MYSQL_PASSWORD=twitf
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      #- ./mysql-slave0/data:/var/lib/mysql
-      - ./mysql-slave0/conf.d:/etc/mysql/conf.d
+      #- ./mariadb-slave0/data:/var/lib/mysql
+      - ./mariadb-slave0/conf.d:/etc/mysql/conf.d
     ports:
       - "3308:3306"
     depends_on:
@@ -46,16 +46,16 @@ services:
     networks:
       backend:
         ipv4_address: 172.19.0.4
-    container_name: mysql-slave0
+    container_name: mariadb-slave0
   mysql-slave1:
-    image: mysql:5.7
+    image: mariadb:latest
     environment:
       - MYSQL_USER=twitf
       - MYSQL_PASSWORD=twitf
       - MYSQL_ROOT_PASSWORD=root
     volumes:
-      #- ./mysql-slave0/data:/var/lib/mysql
-      - ./mysql-slave1/conf.d:/etc/mysql/conf.d
+      #- ./mariadb-slave0/data:/var/lib/mysql
+      - ./mariadb-slave1/conf.d:/etc/mysql/conf.d
     ports:
       - "3309:3306"
     depends_on:
@@ -63,7 +63,7 @@ services:
     networks:
       backend:
         ipv4_address: 172.19.0.5
-    container_name: mysql-slave1
+    container_name: mariadb-slave1
   mycat:
     build: ./mycat
     volumes:

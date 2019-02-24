@@ -1,0 +1,13 @@
+[mysqld]
+binlog-format=ROW    # 二进制日志文件格式
+log-slave-updates=True    # slave更新是否记入日志
+master-info-repository=TABLE
+relay-log-info-repository=TABLE   # 此两项为打开从服务器崩溃二进制日志功能，信息记录在事物表而不是保存在文件
+sync-master-info=1    # 值为1确保信息不会丢失
+slave-parallel-threads=2 #同时启动多少个复制线程，最多与要复制的数据库数量相等即可
+binlog-checksum=CRC32    # 效验码
+master-verify-checksum=1    # 启动主服务器效验
+slave-sql-verify-checksum=1   # 启动从服务器效验
+binlog-rows-query-log-events=1    # 用于在二进制日志详细记录事件相关的信息，可降低故障排除的复杂度
+log-bin=log-bin # 二进制日志，后面指定存放位置。如果只是指定名字，默认存放在/var/lib/mysql下
+server-id=3 # 一组主从组里的每个id必须是唯一值，取值为1到2的32次方-1的整数。推荐用ip位数
